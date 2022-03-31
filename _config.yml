@@ -103,7 +103,7 @@ theme: fluid
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/yafengsun/yafengsun.github.io.git
+  repo: git@github.com:yafengsun/yafengsun.github.io.git
   branch: master
   name: yafengsun
   email: 1906234486@qq.com
