@@ -6,7 +6,10 @@ on:
 jobs:
  build:
   runs-on: ubuntu-latest
-
+  strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [14.x]
   steps:
     - name: Checkout source
       uses: actions/checkout@v1
