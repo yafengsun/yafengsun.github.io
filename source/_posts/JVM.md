@@ -77,7 +77,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 ### 5.运行时内存数据
 
-<img src="../img/运行时数据区域.png" alt="img" style="zoom:50%;float:left" />
+![运行时数据区域](../img/运行时数据区域.png)
 
 ### 6.垃圾回收算法
 
@@ -181,7 +181,7 @@ class pointer 4字节
 
 对齐 追求效率 （4字节）
 
-![image-20220330232253954](/Users/macos/Library/Application Support/typora-user-images/image-20220330232253954.png)
+![对象头包含的内容](../img/对象头包含的内容.png)
 
 - 当一个对象已经计算过identity hash code，它就无法进入偏向锁状态； 
 
