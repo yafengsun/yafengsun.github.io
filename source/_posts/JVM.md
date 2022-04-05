@@ -10,6 +10,13 @@ categories: JVM
 
 单例模式，双重检测，指令重排序，https://tech.meituan.com/2014/09/23/java-memory-reordering.html
 
+JIT codeCache 
+https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html
+内存模型
+https://segmentfault.com/a/1190000023646225
+为什么有两个 survivor
+https://xuliugencn.blog.csdn.net/article/details/79606795
+
 ### 类的加载过程
 
 加载->验证->准备->解析->初始化->卸载
