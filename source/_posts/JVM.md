@@ -1,8 +1,14 @@
 ---
 title: JVM
+date: 2022/04/05 23:16:25
+comments: true
+tags: JVM
+categories: JVM
 ---
 
 # JVM
+
+单例模式，双重检测，指令重排序，https://tech.meituan.com/2014/09/23/java-memory-reordering.html
 
 ### 类的加载过程
 
@@ -26,7 +32,7 @@ title: JVM
 
 - 这时候进行内存分配的仅包括类变量（static），而不包括实例变量，实例变量会在对象实例化时随着对象一块分配在 Java 堆中。
 
-- 这里所设置的初始值"通常情况"下是数据类型默认的零值（如0、0L、null、false等），比如我们定义了`public static int value=111` ，那么 value 变量在准备阶段的初始值就是 0 而不是111（初始化阶段才会赋值）。特殊情况：比如给 value 变量加上了 fianl 关键字`public static final int value=111` ，那么准备阶段 value 的值就被赋值为 111。
+- 这里所设置的初始值"通常情况"下是数据类型默认的零值（如0、0L、null、false等），比如我们定义了`public static int value = 111` ，那么 value 变量在准备阶段的初始值就是 0 而不是111（初始化阶段才会赋值）。特殊情况：比如给 value 变量加上了 fianl 关键字`public static final int value = 111` ，那么准备阶段 value 的值就被赋值为 111。
 
 **解析**
 
@@ -54,7 +60,7 @@ title: JVM
 
 - 该类的类加载器的实例已被GC
 
-### 2.类加载器
+### 类加载器
 
 JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他类加载器均由 Java 实现且全部继承自`java.lang.ClassLoader`：
 
@@ -63,29 +69,42 @@ JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他
 - **ExtensionClassLoader(扩展类加载器)** ：主要负责加载目录 `%JRE_HOME%/lib/ext` 目录下的jar包和类，或被 `java.ext.dirs` 系统变量所指定的路径下的jar包。
 - **AppClassLoader(应用程序类加载器)** :面向我们用户的加载器，负责加载当前应用classpath下的所有jar包和类。
 
-### 3.双亲委派机制
+### 双亲委派机制
 
 每一个类都有一个对应它的类加载器。系统中的 ClassLoder 在协同工作的时候会默认使用 **双亲委派模型** 。即在类加载的时候，系统会首先判断当前类是否被加载过。已经被加载的类会直接返回，否则才会尝试加载。加载的时候，首先会把该请求委派该父类加载器的 `loadClass()` 处理，因此所有的请求最终都应该传送到顶层的启动类加载器 `BootstrapClassLoader` 中。当父类加载器无法处理时，才由自己来处理。当父类加载器为null时，会使用启动类加载器 `BootstrapClassLoader` 作为父类加载器。
 
 **自定义加载器的话，需要继承 `ClassLoader` 。如果我们不想打破双亲委派模型，就重写 `ClassLoader` 类中的 `findClass()` 方法即可，无法被父类加载器加载的类最终会通过这个方法被加载。但是，如果想打破双亲委派模型则需要重写 `loadClass()` 方法**	
 
-### 4.Java内存模型以及1.8的内存模型变化
+
+
+### 公司用的JVM版本
+
+采集的信息
+目前使用的是ConcurrentMarkSweep 老年代 ,ParNew 新生代 每 2 ~ 3 分钟触发一次 YoungGc, GC时长在19ms - 30 ms,
+ • Par Eden Space
+ • Code Cache
+ • Compressed Class Space
+ • Par Survivor Space
+ • CMS Old Gens
+ • Metaspace
+
+### Java内存模型以及1.8的内存模型变化
 
 Java内存模型规定了所有的变量都存储在主内存(Main Memory)中。每条线程 还有自己的工作内存(Working Memory ，线程的工作内存中保存了被该线程使用的变量的主内存副本[2]，线程对变量的所有操作(读取、赋值等)都必须在工作内存中进行，而不能直接读写主内存中的数据[3]。不同的线程之间也无法直接访问对方工作内存中的变 量，线程间变量值的传递均需要通过主内存来完成。
 
 JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空间（MetaSpace）**。
 
-### 5.运行时内存数据
+### 运行时内存数据
 
-![运行时数据区域](../img/运行时数据区域.png)
 
-### 6.垃圾回收算法
 
-#### 6.1 怎么判断对象是垃圾？
+### 垃圾回收算法
+
+#### 怎么判断对象是垃圾？
 
 通过可达性分析算法来判定对象是否存活。
 
-#### 6.2 GCRoots集合
+#### GCRoots集合
 
 - 虚拟机栈(栈帧中的本地变量表)中引用的对象
 
@@ -95,7 +114,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 - 方法区中常量引用的对象
 
-#### 6.3 垃圾回收算法？
+#### 垃圾回收算法？
 
 - 标记-清除算法
 
@@ -105,7 +124,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 - 分代收集算法
 
-#### 6.4 垃圾回收器？
+#### 垃圾回收器？
 
 - Serial收集器(Serial Old)
 
@@ -145,7 +164,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 - ZGC垃圾回收器
 
-#### 6.5 四种引用类型：强软弱虚
+#### 四种引用类型：强软弱虚
 
 - 强引用是最传统的“引用”的定义，是指在程序代码之中普遍存在的引用赋值，即类似“Object obj=new Object()”这种引用关系。无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回 收掉被引用的对象。
 
@@ -155,7 +174,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 - 虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的 存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚 引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。在JDK 1.2版之后提供 了PhantomReference类来实现虚引用。管理堆外内存DirectByteBuffer
 
-#### 6.6 对象的访问
+#### 对象的访问
 
 目前主流的访问方式有**①使用句柄**和**②直接指针**。
 
@@ -163,7 +182,7 @@ JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空
 
 `直接指针`： 如果使用直接指针访问，那么 Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而 reference 中存储的直接就是对象的地址。
 
-#### 6.7 内存占用的字节大小
+#### 内存占用的字节大小
 
 在 Hotspot 虚拟机中，对象在内存中的布局可以分为 3 块区域：**对象头**、**实例数据**和**对齐填充**。
 
@@ -189,9 +208,33 @@ class pointer 4字节
 
 - 轻量级锁的实现中，会通过线程栈帧的锁记录存储Displaced Mark Word；重量锁的实现中，ObjectMonitor类里有字段可以记录非加锁状态下的mark word，其中可以存储identity hash code的值。
 
+  #### 无锁
+  
+  
+  
+  #### 偏向锁
+  
+  对象头的变化，hashcode和偏向锁能不能共存？
+  
+   https://blog.csdn.net/Saintyyu/article/details/108295657
+  
+  #### 轻量级锁
+  
+  
+  
+  LockRecord是什么
+  
+  
+  
+  #### 重量级锁
+  
+  Monitor是什么
+  
   锁：https://www.cnblogs.com/twoheads/p/10150063.html
+  
+  
 
-#### 6.8 对象创建过程(半初始化)
+#### 对象创建过程(半初始化)
 
 ##### Step1:类加载检查
 
@@ -225,7 +268,7 @@ class pointer 4字节
 
 在上面工作都完成之后，从虚拟机的视角来看，一个新的对象已经产生了，但从 Java 程序的视角来看，对象创建才刚开始，`<init>` 方法还没有执行，所有的字段都还为零。所以一般来说，执行 new 指令之后会接着执行 `<init>` 方法，把对象按照程序员的意愿进行初始化，这样一个真正可用的对象才算完全产生出来。
 
-#### 6.9 OOM问题处理
+#### OOM问题处理
 
 核心：拿到堆的快照
 
@@ -260,42 +303,43 @@ jamp -dump:live,format=b,file=<filepath> <pid>（运行时）
 
 
 
-### 7. 锁升级过程
+### 锁升级过程
 
 - 锁的状态一共分为四种, 无锁、偏向锁、轻量级锁、重量级锁。
+-  https://www.cnblogs.com/twoheads/p/10150063.html
 
 
 
 
-### 8. 排查JVM问题
+### 排查JVM问题
 
-1. **jps**
+- **`jps`**
 
-jps (JVM Process Status Tool) 查看正在运行的java虚拟机进程，可以查看正在运行的java进程占用的pid
+​	jps (JVM Process Status Tool) 查看正在运行的java虚拟机进程，可以查看正在运行的java进程占用的pid
 
-2. **jstat**
+- **`jstat`**
 
-jstat(JVM Statistics Mornitoring Tool): 查看虚拟机运行时信息，jstat可以查看Java虚拟机各种运行状态信息，可以通过它查看JAVA虚拟机进程中的类装载、堆内存、垃圾收集、JIT编译等运行数据。
+​	jstat(JVM Statistics Mornitoring Tool): 查看虚拟机运行时信息，jstat可以查看Java虚拟机各种运行状态信息，可以通过它查看JAVA虚拟机进程中的类装载、堆内存、垃圾收集、JIT编译等运行数据。
 
 jstat -gc <pid>
 
-3. **jmap**
+- **`jmap`**
 
-jmap可以生成Java程序的堆的dump文件，也可以查看堆内存对象的统计信息，查看ClassLoader的信息以及finalizer队列
+​	jmap可以生成Java程序的堆的dump文件，也可以查看堆内存对象的统计信息，查看ClassLoader的信息以及finalizer队列
 
--histo：显示堆中对象统计信息，包括类、实例数量和合计容量
+​	-histo：显示堆中对象统计信息，包括类、实例数量和合计容量
 
--dump：生成Java堆快照。格式为：-dump:[live,]format=b,file=<filename>，其中live子参数说明是否只dump出存活的对象
+​	-dump：生成Java堆快照。格式为：-dump:[live,]format=b,file=<filename>，其中live子参数说明是否只dump出存活的对象
 
-`jmap -dump:format=b,file=/root/logs/heap.hprof 1612<pid>`
+​	`jmap -dump:format=b,file=/root/logs/heap.hprof 1612<pid>`
 
-4. **jhat**
+- **`jhat`**
 
-jhat(JVM Heap Analysis Tool ) : JDK自带的堆分析工具
+​	jhat(JVM Heap Analysis Tool ) : JDK自带的堆分析工具
 
-jhat命令与jmap命令搭配使用，用来分析jmap生成的堆快照信息
+​	jhat命令与jmap命令搭配使用，用来分析jmap生成的堆快照信息
 
-5. **jstack**
+- **`jstack`**
 
 jstack(Stack Trace For Java): 查看虚拟机当前时刻的线程快照
 
@@ -303,7 +347,7 @@ jstack(Stack Trace For Java): 查看虚拟机当前时刻的线程快照
 
 `jstack -l 1612 > /root/logs/jstack.txt`
 
-6. **jinfo**
+- **`jinfo`**
 
 jinfo(Configuration Info For Java) : 实时查看和调整虚拟机的各项参数
 
@@ -311,14 +355,14 @@ jinfo(Configuration Info For Java) : 实时查看和调整虚拟机的各项参�
 
 -sysprops：打印Java相关系统参数
 
-7. **visualvm** 
+- **`visualvm`** 
 
-   图形化界面，一般在测试环境使用
+图形化界面，一般在测试环境使用
 
 ##### 其他工具
 
 - Apache 压力测试工具 JMeter
 
-- JProfier
+- JProfiers
 
 - Arthas
