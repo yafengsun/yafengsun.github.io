@@ -84,7 +84,7 @@ JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他
 
 
 
-### 公司用的JVM版本
+### JVM中值得关注的信息
 
 采集的信息
 目前使用的是ConcurrentMarkSweep 老年代 ,ParNew 新生代 每 2 ~ 3 分钟触发一次 YoungGc, GC时长在19ms - 30 ms,
