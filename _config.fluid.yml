@@ -672,7 +672,7 @@ post:
 # Based on GitHub Issues
 # See: https://utteranc.es
 utterances:
-  repo:
+  repo: yafengsun/yafengsun.github.io
   issue_term: pathname
   label: utterances
   theme: github-light
