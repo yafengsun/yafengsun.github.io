@@ -12,8 +12,7 @@ categories: JVM
 
 JIT codeCache 
 https://tech.meituan.com/2020/10/22/java-jit-practice-in-meituan.html
-内存模型
-https://segmentfault.com/a/1190000023646225
+
 为什么有两个 survivor
 https://xuliugencn.blog.csdn.net/article/details/79606795
 
@@ -87,7 +86,8 @@ JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他
 ### JVM中值得关注的信息
 
 采集的信息
-目前使用的是ConcurrentMarkSweep 老年代 ,ParNew 新生代 每 2 ~ 3 分钟触发一次 YoungGc, GC时长在19ms - 30 ms,
+目前使用的是ConcurrentMarkSweep 老年代 ,ParNew 新生代 每 2 ~ 3 分钟触发一次 YoungGc, GC时长在19ms - 30 ms。
+
  • Par Eden Space
  • Code Cache
  • Compressed Class Space
@@ -97,11 +97,14 @@ JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他
 
 ### Java内存模型以及1.8的内存模型变化
 
-Java内存模型规定了所有的变量都存储在主内存(Main Memory)中。每条线程 还有自己的工作内存(Working Memory ，线程的工作内存中保存了被该线程使用的变量的主内存副本[2]，线程对变量的所有操作(读取、赋值等)都必须在工作内存中进行，而不能直接读写主内存中的数据[3]。不同的线程之间也无法直接访问对方工作内存中的变 量，线程间变量值的传递均需要通过主内存来完成。
+Java内存模型规定了所有的变量都存储在主内存(Main Memory)中。每条线程 还有自己的工作内存(Working Memory ，线程的工作内存中保存了被该线程使用的变量的主内存副本，线程对变量的所有操作(读取、赋值等)都必须在工作内存中进行，而不能直接读写主内存中的数据。不同的线程之间也无法直接访问对方工作内存中的变 量，线程间变量值的传递均需要通过主内存来完成。
 
 JDK1.8与1.7最大的区别是**1.8将永久代取消，取而代之的是元空间（MetaSpace）**。
 
 ### 运行时内存数据
+
+内存模型
+https://segmentfault.com/a/1190000023646225
 
 
 
